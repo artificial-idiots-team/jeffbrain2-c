@@ -13,8 +13,8 @@ static lv_style_t style_m3_btn;
 lv_obj_t * main_tabview = NULL;
 lv_obj_t * temp_bar_dbl = NULL;
 lv_obj_t * temp_bar_dbr = NULL;
-lv_obj_t * temp_bar_arm = NULL;
-lv_obj_t * temp_bar_clw = NULL;
+lv_obj_t * temp_bar_int = NULL;
+lv_obj_t * temp_bar_chn = NULL;
 lv_obj_t * temp_label_dbl = NULL;
 lv_obj_t * temp_label_dbr = NULL;
 lv_obj_t * temp_label_arm = NULL;
@@ -51,19 +51,19 @@ void temp_update_task(void* param) {
     pros::Motor *motors[] = {
         &drivebase_left,
         &drivebase_right,
-        &arm_motor,
-        &claw_motor
+        &int_motor,
+        &chn_motor
     };
 
     lv_obj_t *bars[] = {
         temp_bar_dbl,
         temp_bar_dbr,
-        temp_bar_arm,
-        temp_bar_clw
+        temp_bar_int,
+        temp_bar_chn
     };
 
     const char *names[] = {
-        "DBL", "DBR", "ARM", "CLW"
+        "DBL", "DBR", "INT", "CHN"
     };
 
     static char buffer[32];
@@ -89,49 +89,47 @@ void temp_update_task(void* param) {
     }
 }
 
-void legacy_temp_update_task(void* param) {
-    pros::Motor *motors[] = {
-        &drivebase_left,
-        &drivebase_right,
-        &arm_motor,
-        &claw_motor
-    };
-
-    lv_obj_t *labels[] = {
-        temp_label_dbl,
-        temp_label_dbr,
-        temp_label_arm,
-        temp_label_clw
-    };
-
-    const char *names[] = {
-        "DBL", "DBR", "ARM", "CLW"
-    };
-
-    static char buffer[32];
-
-    while (true) {
-        for (int i = 0; i < 4; i++) {
-            double current_temp = motors[i]->get_temperature();
-            // double current_temp = 42.0; <- Declare static value to debug task code.
-            lv_obj_t *current_label = labels[i];
-            
-            snprintf(buffer, sizeof(buffer), "%s: %.1f C", names[i], current_temp);
-            lv_label_set_text(current_label, buffer);
-
-            if (current_temp > 999.0) {
-                snprintf(buffer, sizeof(buffer), "%s: ERR", names[i]);
-                lv_obj_set_style_text_color(current_label, LV_COLOR_MAKE(255, 165, 0), LV_PART_MAIN);
-            } else if (current_temp > 55.0) {
-                lv_obj_set_style_text_color(current_label, LV_COLOR_MAKE(255, 0, 0), LV_PART_MAIN);
-            } else {
-                lv_obj_set_style_text_color(current_label, lv_color_white(), LV_PART_MAIN);
-            }
-        }
-
-        pros::delay(200);
-    }
-}
+// void temp_update_task(void* param) {
+//     pros::Motor *motors[] = {
+//         &drivebase_left,
+//         &drivebase_right,
+//         &arm_motor,
+//         &claw_motor
+//     };
+//
+//     lv_obj_t *bars[] = {
+//         temp_bar_dbl,
+//         temp_bar_dbr,
+//         temp_bar_arm,
+//         temp_bar_clw
+//     };
+//
+//     const char *names[] = {
+//         "DBL", "DBR", "ARM", "CLW"
+//     };
+//
+//     static char buffer[32];
+//
+//     while (true) {
+//         for (int i = 0; i < 4; i++) {
+//             double current_temp = motors[i]->get_temperature();
+//             // double current_temp = 42.0; <- Declare static value to debug task code.
+//             lv_obj_t *current_bar = bars[i];
+//            
+//             lv_bar_set_value(bars[i], current_temp, LV_ANIM_ON);
+//
+//             if (current_temp > 999.0) {
+//                 lv_obj_set_style_bg_color(current_bar, lv_palette_main(LV_PALETTE_ORANGE), LV_PART_INDICATOR);
+//             } else if (current_temp > 55.0) {
+//                 lv_obj_set_style_bg_color(current_bar, lv_palette_main(LV_PALETTE_RED), LV_PART_INDICATOR);
+//             } else {
+//                 lv_obj_set_style_bg_color(current_bar, lv_palette_main(LV_PALETTE_BLUE), LV_PART_INDICATOR);
+//             }
+//         }
+//
+//         pros::delay(200);
+//     }
+// }
 
 void create_temp_tab(lv_obj_t * parent_tab) {
     lv_obj_t * cont = lv_obj_create(parent_tab);
@@ -155,37 +153,37 @@ void create_temp_tab(lv_obj_t * parent_tab) {
     lv_obj_set_size(temp_bar_dbr, 440, 10);
     lv_bar_set_range(temp_bar_dbr, 0, 100);
     
-    temp_bar_arm = lv_bar_create(cont);
-    lv_obj_set_pos(temp_bar_arm, 10, 70);
-    lv_obj_set_size(temp_bar_arm, 440, 10);
-    lv_bar_set_range(temp_bar_arm, 0, 100);
+    temp_bar_int = lv_bar_create(cont);
+    lv_obj_set_pos(temp_bar_int, 10, 70);
+    lv_obj_set_size(temp_bar_int, 440, 10);
+    lv_bar_set_range(temp_bar_int, 0, 100);
     
-    temp_bar_clw = lv_bar_create(cont);
-    lv_obj_set_pos(temp_bar_clw, 10, 100);
-    lv_obj_set_size(temp_bar_clw, 440, 10);
-    lv_bar_set_range(temp_bar_clw, 0, 100);
+    temp_bar_chn = lv_bar_create(cont);
+    lv_obj_set_pos(temp_bar_chn, 10, 100);
+    lv_obj_set_size(temp_bar_chn, 440, 10);
+    lv_bar_set_range(temp_bar_chn, 0, 100);
 
     lv_obj_set_style_radius(temp_bar_dbl, 8, LV_PART_MAIN);
     lv_obj_set_style_radius(temp_bar_dbr, 8, LV_PART_MAIN);
-    lv_obj_set_style_radius(temp_bar_arm, 8, LV_PART_MAIN);
-    lv_obj_set_style_radius(temp_bar_clw, 8, LV_PART_MAIN);
+    lv_obj_set_style_radius(temp_bar_int, 8, LV_PART_MAIN);
+    lv_obj_set_style_radius(temp_bar_chn, 8, LV_PART_MAIN);
     lv_obj_set_style_bg_color(temp_bar_dbl, lv_color_hex(0x353139), LV_PART_MAIN);
     lv_obj_set_style_bg_color(temp_bar_dbr, lv_color_hex(0x353139), LV_PART_MAIN);
-    lv_obj_set_style_bg_color(temp_bar_arm, lv_color_hex(0x353139), LV_PART_MAIN);
-    lv_obj_set_style_bg_color(temp_bar_clw, lv_color_hex(0x353139), LV_PART_MAIN);
+    lv_obj_set_style_bg_color(temp_bar_int, lv_color_hex(0x353139), LV_PART_MAIN);
+    lv_obj_set_style_bg_color(temp_bar_chn, lv_color_hex(0x353139), LV_PART_MAIN);
     lv_obj_set_style_border_width(temp_bar_dbl, 1, LV_PART_MAIN);
     lv_obj_set_style_border_width(temp_bar_dbr, 1, LV_PART_MAIN);
-    lv_obj_set_style_border_width(temp_bar_arm, 1, LV_PART_MAIN);
-    lv_obj_set_style_border_width(temp_bar_clw, 1, LV_PART_MAIN);
+    lv_obj_set_style_border_width(temp_bar_int, 1, LV_PART_MAIN);
+    lv_obj_set_style_border_width(temp_bar_chn, 1, LV_PART_MAIN);
     lv_obj_set_style_border_color(temp_bar_dbl, lv_color_hex(0x49454F), LV_PART_MAIN);
     lv_obj_set_style_border_color(temp_bar_dbr, lv_color_hex(0x49454F), LV_PART_MAIN);
-    lv_obj_set_style_border_color(temp_bar_arm, lv_color_hex(0x49454F), LV_PART_MAIN);
-    lv_obj_set_style_border_color(temp_bar_clw, lv_color_hex(0x49454F), LV_PART_MAIN);
+    lv_obj_set_style_border_color(temp_bar_int, lv_color_hex(0x49454F), LV_PART_MAIN);
+    lv_obj_set_style_border_color(temp_bar_chn, lv_color_hex(0x49454F), LV_PART_MAIN);
 
     lv_obj_set_style_radius(temp_bar_dbl, 8, LV_PART_INDICATOR);
     lv_obj_set_style_radius(temp_bar_dbr, 8, LV_PART_INDICATOR);
-    lv_obj_set_style_radius(temp_bar_arm, 8, LV_PART_INDICATOR);
-    lv_obj_set_style_radius(temp_bar_clw, 8, LV_PART_INDICATOR);
+    lv_obj_set_style_radius(temp_bar_int, 8, LV_PART_INDICATOR);
+    lv_obj_set_style_radius(temp_bar_chn, 8, LV_PART_INDICATOR);
 
     temp_label_dbl = lv_label_create(cont); // Fixed because I'll probably use these objects later - Aiden
     lv_label_set_text(temp_label_dbl, "Drivebase left");

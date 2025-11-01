@@ -6,12 +6,20 @@
 extern lv_obj_t * main_tabview;
 extern lv_obj_t * temp_bar_dbl;
 extern lv_obj_t * temp_bar_dbr;
-extern lv_obj_t * temp_bar_arm;
-extern lv_obj_t * temp_bar_clw;
 extern lv_obj_t * temp_label_dbl;
 extern lv_obj_t * temp_label_dbr;
-extern lv_obj_t * temp_label_arm;
-extern lv_obj_t * temp_label_clw;
+
+extern lv_obj_t * temp_bar_int;
+extern lv_obj_t * temp_bar_chn;
+extern lv_obj_t * temp_label_int;
+extern lv_obj_t * temp_label_chn;
+
+// Old motors from Clawbot Jeff 2.
+// extern lv_obj_t * temp_bar_arm;
+// extern lv_obj_t * temp_bar_clw;
+// extern lv_obj_t * temp_label_arm;
+// extern lv_obj_t * temp_label_clw;
+
 extern lv_obj_t * config_dropdown;
 extern int control_mode;
 
