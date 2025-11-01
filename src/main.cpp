@@ -8,13 +8,13 @@
 void initialize() {
 	drivebase_left.set_gearing(pros::v5::MotorGears::green);
     drivebase_right.set_gearing(pros::v5::MotorGears::green);
-    arm_motor.set_gearing(pros::v5::MotorGears::red);
-    claw_motor.set_gearing(pros::v5::MotorGears::green);
+    // arm_motor.set_gearing(pros::v5::MotorGears::red);
+    // claw_motor.set_gearing(pros::v5::MotorGears::green);
 
     drivebase_left.set_reversed(false);
     drivebase_right.set_reversed(false);
-    arm_motor.set_reversed(false);
-    claw_motor.set_reversed(false);
+    // arm_motor.set_reversed(false);
+    // claw_motor.set_reversed(false);
 
     initialize_interface();
 }
@@ -46,21 +46,21 @@ void opcontrol() {
             drivebase_right.move(-rightdrive);
         }
 
-        if (master_controller.get_digital(pros::E_CONTROLLER_DIGITAL_L2)) {
-            claw_motor.move(127);
-        } else if (master_controller.get_digital(pros::E_CONTROLLER_DIGITAL_R2)) {
-            claw_motor.move(-127);
-        } else {
-            claw_motor.brake();
-        }
-
-        if (master_controller.get_digital(pros::E_CONTROLLER_DIGITAL_L1)) {
-            arm_motor.move(127);
-        } else if (master_controller.get_digital(pros::E_CONTROLLER_DIGITAL_R1)) {
-            arm_motor.move(-127);
-        } else {
-            arm_motor.brake();
-        }
+        // if (master_controller.get_digital(pros::E_CONTROLLER_DIGITAL_L2)) {
+        //     claw_motor.move(127);
+        // } else if (master_controller.get_digital(pros::E_CONTROLLER_DIGITAL_R2)) {
+        //     claw_motor.move(-127);
+        // } else {
+        //     claw_motor.brake();
+        // }
+        //
+        // if (master_controller.get_digital(pros::E_CONTROLLER_DIGITAL_L1)) {
+        //     arm_motor.move(127);
+        // } else if (master_controller.get_digital(pros::E_CONTROLLER_DIGITAL_R1)) {
+        //     arm_motor.move(-127);
+        // } else {
+        //     arm_motor.brake();
+        // }
 
         pros::delay(5);
 	}
